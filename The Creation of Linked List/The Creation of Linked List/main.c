@@ -44,12 +44,22 @@ void Display(struct Node *p)
     }
 }
 
+void RecursiveDisplay(struct Node *p)
+{
+    if(p)
+    {
+        printf(" %d ",p->data);
+        RecursiveDisplay(p->next);
+    }
+}
+
 
 int main()
 {
     int A[5] = {1,2,3,4,5};
     Create(A,5);
-    Display(first);
+    //Display(first);
+    RecursiveDisplay(first);
     return 0;
     
 }
