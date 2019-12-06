@@ -6,17 +6,76 @@
 //  Copyright © 2019 Projects. All rights reserved.
 //
 
-#include<stdlib.h>
 #include<stdio.h>
-#include<limits.h>
+#include<stdlib.h>
 
 struct Node
 {
     int data;
-    struct Node *next;
-} *first;
+    struct Node *next;          // self referential structures
+} *first=NULL,*second=NULL,*third=NULL;
 
-int Count(struct Node *p)
+void create(int A[], int n)
+{
+    int i;
+    struct Node *t;
+    struct Node *last;
+    first = (struct Node *)malloc(sizeof(struct Node));
+    first->data = A[0];
+    first->next = NULL;
+    last = first;
+    
+    for(i=1; i<n; i++)
+    {
+        t = (struct Node *)malloc(sizeof(struct Node));
+        t->data = A[i];
+        t->next = NULL;
+        last->next = t;
+        last = t;
+    }
+}
+
+void createSecond(int A[], int n)
+{
+    int i;
+    struct Node *t;
+    struct Node *last;
+    second = (struct Node *)malloc(sizeof(struct Node));
+    second->data = A[0];
+    second->next = NULL;
+    last = second;
+    
+    for(i=1; i<n; i++)
+    {
+        t = (struct Node *)malloc(sizeof(struct Node));
+        t->data = A[i];
+        t->next = NULL;
+        last->next = t;
+        last = t;
+    }
+}
+
+
+void display(struct Node *p)
+{
+    while(p)
+    {
+        printf(" %d ", p->data);
+        p = p->next;
+    }
+}
+
+void recursiveDisplay(struct Node *p)
+{
+    if(p)
+    {
+        printf(" %d ", p->data);
+        display(p->next);
+    }
+        
+}
+
+int countingNodes(struct Node *p)
 {
     int count = 0;
     while(p)
@@ -27,63 +86,118 @@ int Count(struct Node *p)
     return count;
 }
 
+int recursiveCount(struct Node *p)
+{
+    if(!p)
+        return 0;
+    return recursiveCount(p->next)+1;
+}
 
-void Display(struct Node *p)
+int sumOfAllElements(struct Node *p)
+{
+    int sum=0;
+    while(p)
+    {
+        sum+=p->data;
+        p = p->next;
+    }
+    return sum;
+}
+
+int recursivesumOfAllElements(struct Node *p)
+{
+    if(!p)
+        return 0;
+    return recursivesumOfAllElements(p->next)+p->data;
+}
+
+int maximumNode(struct Node *p)
+{
+    int max = 0;
+    
+    while(p)
+    {
+        if(p->data>max)
+            max = p->data;
+        p = p->next;
+    }
+    return max;
+}
+
+struct Node * linearSearch(struct Node *p, int key)
 {
     while(p)
     {
-        printf(" %d ", p->data);
+        if(p->data==key)
+            return p;
         p = p->next;
     }
+    return NULL;
 }
 
-void Insert(struct Node *p, int position, int x)
+struct Node *recursiveLinearSearch(struct Node *p, int key)
 {
-    struct Node *t,*y;
-    if(position<0 || position > Count(first))
-        return;
+    if(p==NULL)
+        return NULL;
+    if(p->data==key)
+        return p;
+    return recursiveLinearSearch(p->next,key);
+}
+
+struct Node * improvedLinearSearch(struct Node *p, int key)
+{
+    struct Node *q=NULL;
     
-    if(position==0)
+    while(p)
     {
-        t = (struct Node *)malloc(sizeof(struct Node));
-        t->data = x;
+        if(key==p->data)
+        {
+            q->next = p;
+            p->next = first;
+            first = p;
+        }
+        q = p;
+        p = p->next;
+    }
+    return p;
+}
+
+void insertion(struct Node *p, int x, int position)
+{
+    struct Node *t = (struct Node *)malloc(sizeof(struct Node));
+    t->data = x;
+    if(position<0 || position>countingNodes(first))
+        return;
+    if(position==1)
+    {
         t->next = first;
         first = t;
     }
-    
     else
     {
-        y = first;
-        for(int i=0; i<position-1; i++)
+        for(int i=1; i<position-1; i++)
         {
-            y = y->next;
+            p = p->next;
         }
-        
-            t = (struct Node *)malloc(sizeof(struct Node));
-            t->data = x;
-            t->next = y->next;
-            y->next = t;
-        
+        t->next = p->next;
+        p->next = t;
     }
     
 }
 
-void InsertLast(struct Node *p, int x)
+void insertLast(struct Node *p, int x)
 {
-    struct Node *last = first;
-    for(int i=1;i<Count(first); i++)
+    struct Node *last=first;
+    for(int i=1; i<countingNodes(first);i++)
     {
         last = last->next;
     }
-
     struct Node *t = (struct Node *)malloc(sizeof(struct Node));
-    t->data = x;
+    t->data=x;
     t->next = NULL;
-    
     if(first==NULL)
     {
-        first = t;
-        last = t;
+        first=t;
     }
     else
     {
@@ -92,126 +206,92 @@ void InsertLast(struct Node *p, int x)
     }
 }
 
-void SortedInsertion(struct Node *p, int x)
+void insertLastSecond(struct Node *p, int x)
 {
-    struct Node *tail = NULL;
+    struct Node *last=second;
+    for(int i=1; i<countingNodes(second);i++)
+    {
+        last = last->next;
+    }
     struct Node *t = (struct Node *)malloc(sizeof(struct Node));
-    t->data = x;
+    t->data=x;
     t->next = NULL;
-    
-    if(first==NULL)
-        first = t;
+    if(second==NULL)
+    {
+        second=t;
+    }
     else
     {
-    while(p && p->data<x)
-    {
-        tail = p;
-        p = p->next;
+        last->next = t;
+        last = t;
     }
-    if(p==first)
+}
+
+void sortedListInsertion(struct Node *p, int x)
+{
+    struct Node *t = (struct Node *)malloc(sizeof(struct Node));
+    t->data=x;
+    t->next = NULL;
+    if(first==NULL)
     {
         t->next = first;
         first = t;
     }
-    else
+    
+    struct Node *q = NULL;
+    while(p && p->data<x)
     {
-    t->next = tail->next;
-    tail->next = t;
+        q=p;
+        p = p->next;
     }
-    }
+    t->next = q->next;
+    q->next = t;
+    
 }
 
-void MySortedInsertion(struct Node *p, int x)
+int delete(struct Node *p, int position)
 {
-    //struct Node *head = first;
-    struct Node *tail = NULL;
-    
-    struct Node *t = (struct Node *)malloc(sizeof(struct Node));
-    t->data = x;
-    t->next = NULL;
-    if(first==NULL)
-    {
-        first = t;
-    }
-    else
-    {
-        for(int i=0; i<Count(first);i++)
-        {
-            if(p->data<x)
-            {
-                tail = p;
-                p = p->next;
-            }
-        }
-        
-        if(p==first)
-        {
-            t->next = first;
-            first = t;
-        }
-        else
-        {
-            t->next = tail->next;
-            tail->next = t;
-        }
-    }
-}
-
-int Deletion(struct Node *p, int position)
-{
-    struct Node *tail = NULL;
-    int x = -1;
-    
-    if(position<1 || position>Count(first))
-        return -1;
-    
+    struct Node *q=NULL;
+    int x;
     if(position==1)
     {
-        tail = first;
-        first = first->next;
-        x = first->data;
-        //p = NULL;
-        free(tail);
-        return x;
-    }
-    
-    else
-    {
-        for(int i=0; i<position-1; i++)
-        {
-            tail = p;
-            p = p->next;
-        }
-        tail->next = p->next;
         x = p->data;
+        first = p->next;
         free(p);
         return x;
     }
-    
+    for(int i=1; i<position && p; i++)
+    {
+        q = p;
+        p = p->next;
+    }
+    q->next = p->next;
+    x = p->data;
+    free(p);
+    return x;
 }
 
-int IsSorted(struct Node *p)
+int isSorted(struct Node *p)
 {
-    int x = INT_MIN;
+    int x = INT32_MIN;
     while(p)
     {
         if(p->data<x)
             return -1;
-        x = p->data;
+        x = p->data;            // p->data > x
         p = p->next;
     }
     return 1;
 }
 
-void RemoveDuplicates(struct Node *p)       // must be sorted first
+void removeDuplicates(struct Node *p)
 {
-    struct Node *q = p->next;    // one node head of p
-    
+    struct Node *q = p->next;               // q is not the tail anymore, it's one step ahead of p
     while(q)
     {
         if(p->data!=q->data)
         {
-            p = q;
+            p=q;
             q = q->next;
         }
         else
@@ -221,13 +301,12 @@ void RemoveDuplicates(struct Node *p)       // must be sorted first
             q = p->next;
         }
     }
-    
 }
 
-void Reverse(struct Node *p)    // auxiliary array creation
+void reverseByAuxArray(struct Node *p)
 {
+    int A[countingNodes(first)];
     int i=0;
-    int A[Count(first)];
     while(p)
     {
         A[i] = p->data;
@@ -244,77 +323,142 @@ void Reverse(struct Node *p)    // auxiliary array creation
     }
 }
 
-void ReverseWithSlidingPointers(struct Node *p)         // without creating auxiliary array
+void reverse(struct Node *p)        // by sliding pointers
 {
-    struct Node *tail1 = NULL;
-    struct Node *tail2 = NULL;
+    struct Node *q = NULL;
+    struct Node *r = NULL;
     while(p)
     {
-        tail2 = tail1;
-        tail1 = p;
+        r = q;
+        q = p;
         p = p->next;
-        tail1->next = tail2;
+        q->next = r;
     }
-    
-    first = tail1;
-
+    first = q;
 }
 
-
-void RecursiveReverse(struct Node *q,struct Node *p)
+void recursiveReverse(struct Node *p,struct Node *q)
 {
     if(p)
     {
-        RecursiveReverse(p,p->next);
+        recursiveReverse(p->next, p);
         p->next = q;
     }
     else
+        first=q;
+}
+
+void concat(struct Node *p, struct Node *q)
+{
+    while(p->next)
     {
-        first = q;
+        p = p->next;
     }
+    p->next = q;
+    q = NULL;
+}
+
+void merging(struct Node *p, struct Node *q)
+{
+    struct Node *last=NULL;
+    
+    if(p->data < q->data)
+    {
+        third = last = p;
+        p = p->next;
+        third->next = NULL;
+    }
+    
+    else          // p->data > q->data
+    {
+        third = last = q;
+        q = q->next;
+        third->next = NULL;
+    }
+    
+    while(p && q)
+    {
+        if(p->data<q->data)
+        {
+            last->next = p;
+            last = p;
+            p = p->next;
+            last->next = NULL;
+        }
+        else         // p->data > q->data
+        {
+            last->next = q;
+            last = q;
+            q = q->next;
+            last->next = NULL;
+        }
+    }
+    
+    if(p)        // filling out the remaining elements
+        last->next = p;
+    if(q)
+        last->next = q;
+    
 }
 
 int main()
-{   // We don't need the creation and the creator(Chuck) anymore.Dot.
+{
+
+    insertLast(first, 10);
+    insertLast(first, 20);
+    insertLast(first, 30);
+    insertLast(first, 40);
+    insertLast(first, 50);
     
-    MySortedInsertion(first, 1);
-    MySortedInsertion(first, 1);
-    MySortedInsertion(first, 2);
-    MySortedInsertion(first, 2);
-    MySortedInsertion(first, 3);
-    MySortedInsertion(first, 4);
-    MySortedInsertion(first, 2);
-    MySortedInsertion(first, 5);
+    insertLastSecond(second, 5);
+    insertLastSecond(second, 154);
+    insertLastSecond(second, 255);
+    insertLastSecond(second, 356);
+    insertLastSecond(second, 457);
+
+    merging(first, second);
+    
+    display(first);
+  
+    //concat(first, second);
+    
+    //display(first);
+    //printf("\n");
+//    removeDuplicates(first);
+//    display(first);
+    //reverseByAuxArray(first);
+//    reverse(first);
+    //recursiveReverse(first, NULL);
+    
+    
+//    sortedListInsertion(first, 56);
+//    sortedListInsertion(first, 6);
+//    sortedListInsertion(first, 47);
+//    sortedListInsertion(first, 33);
+
+    
+//    printf("\n");
+//    printf("Sorted or not? %d ",isSorted(first));
+   //delete(first, 8);
+//    delete(first, 8);
+//    delete(first, 7);
+//    delete(first, 6);
 //
-    RemoveDuplicates(first);
-//    Display(first);
-    
-   // Reverse(first);
-    //ReverseWithSlidingPointers(first);
 
-    RecursiveReverse(NULL, first);
-    Display(first);
-    
-    
-//    Insert(first, 0, 1);
-//    Insert(first, 1, 2);
-//    Insert(first, 2, 3);
-//    Insert(first, 3, 4);
-//    Insert(first, 4, 2);
-
-    //printf(" \nThe result of IsSorted is -> %d ",IsSorted(first));
-    
-//    printf(" \n ");
-//
-//    Deletion(first, 0);
-//    Deletion(first, 5);
-//    Display(first);
-
-//    Sorted(first, 78);
-//    Sorted(first, 43);
+//    display(first);
+//    printf("\nYour key found at %p \n",improvedLinearSearch(first, 4));
+//    display(first);         // 4 moved to front
+//    printf("\nYour key found at %p \n",improvedLinearSearch(first, 4));
+//    display(first);
+    //printf("Your key found at %p ",recursiveLinearSearch(first, 4));
+    //printf("Your key found at %p ",linearSearch(first, 4));
+    //-printf("Maximum node is -> %d ", maximumNode(first));
+    //printf("Sum of all elements -> %d ",recursivesumOfAllElements(first));
+    //printf("Sum of all elements -> %d ",sumOfAllElements(first));
+    //printf("No. of Nodes -> %d ",recursiveCount(first));
+    //printf("No. of Nodes -> %d ",countingNodes(first));
+    //display(first);
+    //recursiveDisplay(first);
     
     return 0;
-    
 }
-
-
