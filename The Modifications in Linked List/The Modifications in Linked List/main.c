@@ -401,6 +401,25 @@ void merging(struct Node *p, struct Node *q)
     
 }
 
+int isLoop(struct Node *f)
+{
+    struct Node *p=NULL,*q=NULL;
+    p = q = f;
+    do
+    {
+        p = p->next;
+        q = q->next;
+        if(q)
+            q = q->next;
+        
+    }while(p && q && p!=q);
+
+    if(p==q)
+        return 1;
+    else
+        return -1;
+}
+
 int main()
 {
 
@@ -410,15 +429,23 @@ int main()
     insertLast(first, 40);
     insertLast(first, 50);
     
-    insertLastSecond(second, 5);
-    insertLastSecond(second, 154);
-    insertLastSecond(second, 255);
-    insertLastSecond(second, 356);
-    insertLastSecond(second, 457);
-
-    merging(first, second);
+//    insertLastSecond(second, 5);
+//    insertLastSecond(second, 154);
+//    insertLastSecond(second, 255);
+//    insertLastSecond(second, 356);
+//    insertLastSecond(second, 457);
     
-    display(first);
+    // let's form a loop
+    struct Node *t1,*t2;
+    
+    t1 = first->next->next;
+    t2 = first->next->next->next->next;     // t2 points to last
+    t2->next = t1;        // loop formed, 50 to 30
+    printf(" %d ",isLoop(first));
+
+//    merging(first, second);
+    
+    //display(first);
   
     //concat(first, second);
     
