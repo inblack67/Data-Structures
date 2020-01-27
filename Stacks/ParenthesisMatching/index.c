@@ -117,7 +117,7 @@ int main()
 {
   struct Node *st;
 
-  char *exp = "{[(a+b)*(a-b)]})";
+  char *exp = "({{{[(a+b)*(a-b)]}}})";
 
   // printf("isBalanced? %d\n",isBalanced(exp));
   printf("isBalanced? %d\n",isBalancedTwo(exp));
