@@ -96,18 +96,89 @@ struct Node * linearSearch(struct Node *p, int key){
     return NULL;
 }
 
+void insertion(struct Node *p, int position, int x){
+    if(countingNodes(p) < position || position < 0){
+        return;
+    }
+    struct Node *t;
+    t = (struct Node *)malloc(sizeof(struct Node));
+    t->data = x;
+    t->next = NULL;
+    if(position == 0){
+        t->next = First;
+        First = t;
+    }
+    else{
+        for(int i=0; i<position-1; i++){
+            p = p->next;
+        }
+        t->next = p->next;
+        p->next = t;
+    }
+}
+
+void insertLast(struct Node *p, int x){
+    struct Node *t;
+    t = (struct Node *)malloc(sizeof(struct Node));
+    t->data = x;
+    t->next = NULL;
+    struct Node *last = First;
+    for (int i=1; i<countingNodes(First); i++) {
+        last = last->next;
+    }
+    if(First == NULL){
+        First = t;
+        last = t;
+    }
+    else{
+        last->next = t;
+        last = t;
+    }
+}
+
+
+void reverse(struct Node *p){
+    struct Node *q = NULL,*r = NULL;
+    while (p) {
+        r = q;
+        q = p;
+        p = p->next;
+        q->next = r;
+    }
+    First = q;
+}
+
+void recursiveReverse(struct Node *p, struct Node *q){
+    if(p){
+        recursiveReverse(p->next, p);
+        p->next = q;
+    }
+    else{
+        First = q;
+    }
+}
+
 int main(){
-    int A[] = {1,2,3,4,5};
-    int n = sizeof(A)/sizeof(int);
-    create(A, n);
+//    int A[] = {1,2,3,4,5};
+//    int n = sizeof(A)/sizeof(int);
+//    create(A, n);
 //    display();
-    struct Node *p = First;
+//    struct Node *p = First;
 //    recursiveDisplay(p);
 //    printf(" %d ", countingNodes(p));
 //    printf(" %d ", recursiveCounting(p));
 //    printf(" %d ", sumOfAllElements(p));
 //    printf(" %d ", recursiveSum(p));
 //    printf(" %d ", maxNode(p));
-    printf("Found at %p ", linearSearch(p, 5));
+//    printf("Found at %p ", linearSearch(p, 5));
+//    insertion(p, 0, 6);
+    insertLast(First, 1);
+    insertLast(First, 2);
+    insertLast(First, 3);
+    insertLast(First, 4);
+    insertLast(First, 5);
+//    reverse(First);
+    recursiveReverse(First, NULL);
+    display();
     return 0;
 }
