@@ -216,6 +216,23 @@ void merge(struct Node *p, struct Node *q){
     }
 }
 
+int hasLoop(struct Node *first){
+    struct Node *q, *r;
+    q = r = first;
+    do {
+        r = r->next;
+        q = q->next;
+        if(q){
+            q = q->next;
+        }
+    }while (q && r && q!=r);
+    if(q == r){
+        return 1;
+    }
+    
+    return -1;
+}
+
 int main(){
     int A[] = {6,7,8,9,11};
     int n = sizeof(A)/sizeof(int);
@@ -240,7 +257,14 @@ int main(){
     int B[] = {5,10,15,20,25};
     create2(B, 5);
 //    concat(First, Second);
-    merge(First, Second);
-    display(Third);
+//    merge(First, Second);
+//    display(Third);
+    struct Node *t1,*t2;
+    t1 = First->next->next;
+    t2 = First->next->next->next->next;
+    t2->next = t1;
+    printf("%d\n", hasLoop(First));
+    
+    
     return 0;
 }
