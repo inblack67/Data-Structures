@@ -5,7 +5,7 @@
 struct Node{
     int data;
     struct Node *next;
-}*First=NULL;
+}*First=NULL, *Second=NULL, *Third=NULL;
 
 void create(int A[], int n){
     struct Node *t, *last;
@@ -22,8 +22,22 @@ void create(int A[], int n){
     }
 }
 
-void display(){
-    struct Node *p = First;
+void create2(int A[], int n){
+    struct Node *t, *last;
+    Second = (struct Node *)malloc(sizeof(struct Node));
+    Second->data = A[0];
+    Second->next = NULL;
+    last = Second;
+    for(int i=1; i<n; i++){
+        t = (struct Node *)malloc(sizeof(struct Node));
+        t->data = A[i];
+        t->next = NULL;
+        last->next = t;
+        last = t;
+    }
+}
+
+void display(struct Node *p){
     while (p) {
         printf(" %d ", p->data);
         p = p->next;
@@ -158,11 +172,18 @@ void recursiveReverse(struct Node *p, struct Node *q){
     }
 }
 
+void concat(struct Node*p, struct Node *q){
+    while (p->next) {
+        p = p->next;
+    }
+    p->next = q;
+}
+
 int main(){
 //    int A[] = {1,2,3,4,5};
 //    int n = sizeof(A)/sizeof(int);
 //    create(A, n);
-//    display();
+//    display(First);
 //    struct Node *p = First;
 //    recursiveDisplay(p);
 //    printf(" %d ", countingNodes(p));
@@ -178,7 +199,10 @@ int main(){
     insertLast(First, 4);
     insertLast(First, 5);
 //    reverse(First);
-    recursiveReverse(First, NULL);
-    display();
+//    recursiveReverse(First, NULL);
+    int B[] = {6, 7, 8, 9, 10};
+    create2(B, 5);
+    concat(First, Second);
+    display(First);
     return 0;
 }
