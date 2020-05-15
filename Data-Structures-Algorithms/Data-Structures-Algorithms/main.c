@@ -172,6 +172,7 @@ void recursiveReverse(struct Node *p, struct Node *q){
     }
 }
 
+
 void concat(struct Node*p, struct Node *q){
     while (p->next) {
         p = p->next;
@@ -179,10 +180,46 @@ void concat(struct Node*p, struct Node *q){
     p->next = q;
 }
 
+void merge(struct Node *p, struct Node *q){
+    struct Node *last;
+    if(p->data < q->data){
+        Third = p;
+        last = p;
+        p = p->next;
+        last->next = NULL;
+    }
+    else{
+        Third = q;
+        last = q;
+        q = q->next;
+        last->next = NULL;
+    }
+    while (p && q) {
+        if(p->data < q->data){
+            last->next = p;
+            last = p;
+            p = p->next;
+            last->next = NULL;
+        }
+        else{
+            last->next = q;
+            last = q;
+            q = q->next;
+            last->next = NULL;
+        }
+    }
+    if(p){
+        last->next = p;
+    }
+    if(q){
+        last->next = q;
+    }
+}
+
 int main(){
-//    int A[] = {1,2,3,4,5};
-//    int n = sizeof(A)/sizeof(int);
-//    create(A, n);
+    int A[] = {6,7,8,9,11};
+    int n = sizeof(A)/sizeof(int);
+    create(A, n);
 //    display(First);
 //    struct Node *p = First;
 //    recursiveDisplay(p);
@@ -193,16 +230,17 @@ int main(){
 //    printf(" %d ", maxNode(p));
 //    printf("Found at %p ", linearSearch(p, 5));
 //    insertion(p, 0, 6);
-    insertLast(First, 1);
-    insertLast(First, 2);
-    insertLast(First, 3);
-    insertLast(First, 4);
-    insertLast(First, 5);
+//    insertLast(First, 1);
+//    insertLast(First, 2);
+//    insertLast(First, 3);
+//    insertLast(First, 4);
+//    insertLast(First, 5);
 //    reverse(First);
 //    recursiveReverse(First, NULL);
-    int B[] = {6, 7, 8, 9, 10};
+    int B[] = {5,10,15,20,25};
     create2(B, 5);
-    concat(First, Second);
-    display(First);
+//    concat(First, Second);
+    merge(First, Second);
+    display(Third);
     return 0;
 }
