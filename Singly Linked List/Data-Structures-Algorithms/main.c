@@ -233,6 +233,27 @@ int hasLoop(struct Node *first){
     return -1;
 }
 
+int middleNode(struct Node *p){
+    int count = countingNodes(p);
+    for (int i=0; i<count/2; i++) {
+        p = p->next;
+    }
+    
+    return p->data;
+}
+
+int singleScanMiddleNode(struct Node *p){
+    struct Node *q = p;
+    while (q) {
+        q = q->next;
+        if(q){
+            q = q->next;
+            p = p->next;    // for every 1 move of p, 1 moves of q
+        }
+    }
+    return p->data;
+}
+
 int main(){
     int A[] = {6,7,8,9,11};
     int n = sizeof(A)/sizeof(int);
@@ -254,17 +275,20 @@ int main(){
 //    insertLast(First, 5);
 //    reverse(First);
 //    recursiveReverse(First, NULL);
-    int B[] = {5,10,15,20,25};
-    create2(B, 5);
+//    int B[] = {5,10,15,20,25};
+//    create2(B, 5);
 //    concat(First, Second);
 //    merge(First, Second);
-//    display(Third);
-    struct Node *t1,*t2;
-    t1 = First->next->next;
-    t2 = First->next->next->next->next;
-    t2->next = t1;
-    printf("%d\n", hasLoop(First));
+////    display(Third);
+//    struct Node *t1,*t2;
+//    t1 = First->next->next;
+//    t2 = First->next->next->next->next;
+//    t2->next = t1;
+//    printf("%d\n", hasLoop(First));
     
+//    printf(" %d ", middleNode(First));
+    printf(" %d ", singleScanMiddleNode(First));
+//    display(First);
     
     return 0;
 }
