@@ -43,15 +43,17 @@ void display(struct Queue *q){
 
 int main() {
     
-    enqueue(1);
-    enqueue(2);
-    enqueue(3);
-    enqueue(4);
-    enqueue(5);
-    dequeue();
-    dequeue();
-    dequeue();
-    display(Front);
+//    enqueue(1);
+//    enqueue(2);
+//    enqueue(3);
+//    enqueue(4);
+//    enqueue(5);
+//    dequeue();
+//    dequeue();
+//    dequeue();
+//    display(Front);
+    char str[] = "gate";
+    printf("%c\n", str[0]);
     return 0;
 }
 
